@@ -40,7 +40,7 @@
 
     <br> <br>
 
-    <div id="status-details"class="row">
+    <div id="status-details" class="row">
 
         <div class="col-md-3 d-flex align-items-stretch justify-content-center align-items-stretch">
 
@@ -87,91 +87,91 @@
 </div>
 
 <script>
-fetch('./json/service-status.json')
-    .then(response => response.json())
-    .then(data => {
-        for (let server in data) {
-            if (server !== 'last_updated') {
-                // Find the corresponding server status element in the DOM
-                let serverStatusElement = document.querySelector(`#${server}`);
-                let serverStatusCard = document.querySelector(`#${server}-details`);
-                console.log(serverStatusCard);
+    fetch('./json/service-status.json')
+        .then(response => response.json())
+        .then(data => {
+            for (let server in data) {
+                if (server !== 'last_updated') {
+                    // Find the corresponding server status element in the DOM
+                    let serverStatusElement = document.querySelector(`#${server}`);
+                    let serverStatusCard = document.querySelector(`#${server}-details`);
+                    console.log(serverStatusCard);
 
-                // Update the server status
-                let status = data[server].status;
-                status = status.charAt(0).toUpperCase() + status.slice(1);
-                serverStatusElement.innerHTML = `${getTitle(server)} : <strong>${status}</strong> <img src="${getStatusImage(status)}" height="20px" style="border-radius:50%;" title="${status}">`;
-                
-                // Update the server status message
-                let cardTextElement = serverStatusCard.querySelector('.card-title');
-                cardTextElement.textContent = `${status}`;
+                    // Update the server status
+                    let status = data[server].status;
+                    status = status.charAt(0).toUpperCase() + status.slice(1);
+                    serverStatusElement.innerHTML = `${getTitle(server)} : <strong>${status}</strong> <img src="${getStatusImage(status)}" height="20px" style="border-radius:50%;" title="${status}">`;
 
-                // Update the server status color
-                serverStatusCard.className = `card text-white ${getStatusColor(status)} mb-3`;
+                    // Update the server status message
+                    let cardTextElement = serverStatusCard.querySelector('.card-title');
+                    cardTextElement.textContent = `${status}`;
 
-                // Update the server status title
-                let cardTitleElement = serverStatusCard.querySelector('.card-text');
-                cardTitleElement.textContent = getStatusMessage(status);
+                    // Update the server status color
+                    serverStatusCard.className = `card text-white ${getStatusColor(status)} mb-3`;
+
+                    // Update the server status title
+                    let cardTitleElement = serverStatusCard.querySelector('.card-text');
+                    cardTitleElement.textContent = getStatusMessage(status);
+                }
             }
+
+            // Update the last updated time
+            let lastUpdatedElement = document.querySelector('#last_updated');
+            lastUpdatedElement.textContent = data.last_updated;
+        })
+        .catch(error => console.error(error));
+
+    function getStatusImage(status) {
+        switch (status.toLowerCase()) {
+            case 'active':
+                return 'https://toppng.com/uploads/preview/free-icons-png-green-button-icon-11562980484agrqdnwooe.png';
+            case 'inactive':
+                return 'https://img.favpng.com/25/18/19/red-circle-button-png-favpng-jHcWHy40hi7EfTVtFQegdS1i6.jpg';
+            case 'busy':
+                return 'https://www.pngkit.com/png/full/139-1398183_a-shiny-light-orange-button-orange-light-icon.png';
+            default:
+                return '';
         }
-
-        // Update the last updated time
-        let lastUpdatedElement = document.querySelector('#last_updated');
-        lastUpdatedElement.textContent = data.last_updated;
-    })
-    .catch(error => console.error(error));
-
-function getStatusImage(status) {
-    switch (status.toLowerCase()) {
-        case 'active':
-            return 'https://toppng.com/uploads/preview/free-icons-png-green-button-icon-11562980484agrqdnwooe.png';
-        case 'inactive':
-            return 'https://img.favpng.com/25/18/19/red-circle-button-png-favpng-jHcWHy40hi7EfTVtFQegdS1i6.jpg';
-        case 'busy':
-            return 'https://www.pngkit.com/png/full/139-1398183_a-shiny-light-orange-button-orange-light-icon.png';
-        default:
-            return '';
     }
-}
 
-function getStatusColor(status) {
-    switch (status.toLowerCase()) {
-        case 'active':
-            return 'bg-success';
-        case 'inactive':
-            return 'bg-danger';
-        case 'busy':
-            return 'bg-warning';
-        default:
-            return '';
+    function getStatusColor(status) {
+        switch (status.toLowerCase()) {
+            case 'active':
+                return 'bg-success';
+            case 'inactive':
+                return 'bg-danger';
+            case 'busy':
+                return 'bg-warning';
+            default:
+                return '';
+        }
     }
-}
 
-function getStatusMessage(status) {
-    switch (status.toLowerCase()) {
-        case 'active':
-            return 'Servers are active and usable. No issues have been reported.';
-        case 'inactive':
-            return 'The servers are inactive. Please be patient as we are working on a fix.';
-        case 'busy':
-            return 'Servers are busy. Limited functionality may be available, but it may be delayed.';
-        default:
-            return '';
+    function getStatusMessage(status) {
+        switch (status.toLowerCase()) {
+            case 'active':
+                return 'Servers are active and usable. No issues have been reported.';
+            case 'inactive':
+                return 'The servers are inactive. Please be patient as we are working on a fix.';
+            case 'busy':
+                return 'Servers are busy. Limited functionality may be available, but it may be delayed.';
+            default:
+                return '';
+        }
     }
-}
 
-function getTitle(server) {
-    switch (server) {
-        case 'web_servers':
-            return 'Web Servers';
-        case 'mail_servers':
-            return 'Mail Servers';
-        case 'ftp_servers':
-            return 'FTP Servers';
-        case 'client_servers':
-            return 'Client Servers';
-        default:
-            return '';
+    function getTitle(server) {
+        switch (server) {
+            case 'web_servers':
+                return 'Web Servers';
+            case 'mail_servers':
+                return 'Mail Servers';
+            case 'ftp_servers':
+                return 'FTP Servers';
+            case 'client_servers':
+                return 'Client Servers';
+            default:
+                return '';
+        }
     }
-}
 </script>

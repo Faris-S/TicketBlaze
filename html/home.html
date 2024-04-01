@@ -16,23 +16,25 @@
 
         <div id="tickets-section">
             <h1 class="mb-3">My open tickets: </h1>
-        <table id="tickets-table" class="table table-hover table-striped align-middle">
-        </table>
+            <table id="tickets-table" class="table table-hover table-striped align-middle">
+            </table>
         </div>
-        
+
     </div>
     <br>
     <div class="container my-2">
         <h1 class="mb-3">Important announcements:</h1>
         <div id="news" class="row mb-2">
             <div class="alert alert-danger d-flex align-items-center" role="alert">
-                <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                  </svg>
+                <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                </svg>
                 <div>
-                  The content could not be loaded. Please try again later.
+                    The content could not be loaded. Please try again later.
                 </div>
-              </div>
+            </div>
         </div>
 
     </div>
@@ -47,8 +49,7 @@
                         to invite you to firsly look at our FAQs section. People usually find the answers that they need
                         there,
                         and if not, youa are free to open a support ticket.</p>
-                    <button class="btn btn-outline-light" type="button"
-                        onclick="window.location.href='#faq'">Frequently
+                    <button class="btn btn-outline-light" type="button" onclick="window.location.href='#faq'">Frequently
                         Asked Questions</button>
                 </div>
             </div>
@@ -86,9 +87,9 @@
 
 <script>
     fetch('./json/tickets.json')
-    .then(response => response.json())
-    .then(data => {
-        let output = `
+        .then(response => response.json())
+        .then(data => {
+            let output = `
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -101,9 +102,9 @@
             </thead>
             <tbody class="table-group-divider">
         `;
-        if (data.length > 0) {
-            data.forEach(ticket => {
-                output += `
+            if (data.length > 0) {
+                data.forEach(ticket => {
+                    output += `
                 <tr>
                     <th scope="row">${ticket.id}</th>
                     <td>${ticket.department}</td>
@@ -116,25 +117,25 @@
                         <!-- END: Check if status is open -->
                     </td>
                 </tr>`;
-            });
-            document.querySelector('#jumbotron').style.display = 'none'; // Hide the jumbotron
-        } else {
-            document.querySelector('#tickets-section').style.display = 'none'; // Hide the tickets section
-            document.querySelector('#jumbotron').style.display = 'block'; // Show the jumbotron
-        }
-        output += `
+                });
+                document.querySelector('#jumbotron').style.display = 'none'; // Hide the jumbotron
+            } else {
+                document.querySelector('#tickets-section').style.display = 'none'; // Hide the tickets section
+                document.querySelector('#jumbotron').style.display = 'block'; // Show the jumbotron
+            }
+            output += `
             </tbody>
         `;
-        document.querySelector('#tickets-table').innerHTML = output;
-    })
-    .catch(error => console.error(error));
-    
+            document.querySelector('#tickets-table').innerHTML = output;
+        })
+        .catch(error => console.error(error));
+
     fetch('./json/news.json')
-    .then(response => response.json())
-    .then(data => {
-        let output = '';
-        data.forEach(news => {
-            output += `
+        .then(response => response.json())
+        .then(data => {
+            let output = '';
+            data.forEach(news => {
+                output += `
             <div class="col-md-6">
                 <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                     <div class="col p-4 d-flex flex-column position-static">
@@ -145,13 +146,13 @@
                     </div>
                 </div>
             </div>`;
-        });
-        document.querySelector('#news').innerHTML = output;
-    })
-    .catch(error => console.error(error));
-    
+            });
+            document.querySelector('#news').innerHTML = output;
+        })
+        .catch(error => console.error(error));
+
     // Add a click event listener to the tickets table
-    document.querySelector('#tickets-table').addEventListener('click', function(event) {
+    document.querySelector('#tickets-table').addEventListener('click', function (event) {
         // Check if the clicked element is a button
         if (event.target.tagName === 'BUTTON') {
             // Get the parent row of the clicked button
@@ -165,26 +166,26 @@
 
     // Get the ticket ID from the clicked button
     const openChatModal = (ticketId) => {
-    // Fetch the ticket data from the JSON file
-    fetch('./json/tickets.json')
-        .then(response => response.json())
-        .then(data => {
-            // Find the ticket with the matching ID
-            const ticket = data.find(ticket => ticket.id == ticketId);
-            if (ticket) {
-                // Update the modal title with the ticket subject
-                document.querySelector('#staticBackdropLabel').textContent = ticket.subject;
-                // Clear the existing chat messages
-                document.querySelector('.chat-message').innerHTML = '';
-                // Add the ticket messages to the chat
-                ticket.messages.forEach(message => {
-                    const chatMessage = `
+        // Fetch the ticket data from the JSON file
+        fetch('./json/tickets.json')
+            .then(response => response.json())
+            .then(data => {
+                // Find the ticket with the matching ID
+                const ticket = data.find(ticket => ticket.id == ticketId);
+                if (ticket) {
+                    // Update the modal title with the ticket subject
+                    document.querySelector('#staticBackdropLabel').textContent = ticket.subject;
+                    // Clear the existing chat messages
+                    document.querySelector('.chat-message').innerHTML = '';
+                    // Add the ticket messages to the chat
+                    ticket.messages.forEach(message => {
+                        const chatMessage = `
                         <p><strong>${message.sender}:</strong> ${message.message}</p>
                     `;
-                    document.querySelector('.chat-message').insertAdjacentHTML('beforeend', chatMessage);
-                });
-            }
-        })
-        .catch(error => console.error(error));
-};
+                        document.querySelector('.chat-message').insertAdjacentHTML('beforeend', chatMessage);
+                    });
+                }
+            })
+            .catch(error => console.error(error));
+    };
 </script>
