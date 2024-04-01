@@ -1,0 +1,78 @@
+[
+    {
+        "id": 1,
+        "subject": "Website login issue",
+        "status": "Open",
+        "lastChange": "25.06.2023. 12:43",
+        "department": "Support",
+        "importance": "High",
+        "messages": [
+            {
+                "sender": "User",
+                "message": "I am unable to login to the website. Can you please help me resolve this issue?"
+            }
+        ],
+        "solved": false
+    },
+    {
+        "id": 2,
+        "subject": "Email delivery problem",
+        "status": "Responded",
+        "lastChange": "03.02.2023. 09:15",
+        "department": "IT",
+        "importance": "Medium",
+        "messages": [
+            {
+                "sender": "User",
+                "message": "I am not receiving emails in my inbox. Can you please check if there is an issue with the email delivery?"
+            },
+            {
+                "sender": "IT",
+                "message": "We have identified the issue with the email delivery and are working on resolving it. We will update you once the problem is fixed."
+            },
+            {
+                "sender": "User",
+                "message": "Thank you for the update."
+            }
+        ],
+        "solved": false
+    },
+    {
+        "id": 3,
+        "subject": "Network connectivity issue",
+        "status": "Awaiting response",
+        "lastChange": "01.01.2021. 15:30",
+        "department": "Network",
+        "importance": "High",
+        "messages": [
+            {
+                "sender": "User",
+                "message": "We are experiencing network connectivity issues in our office. Can you please investigate and resolve the problem?"
+            },
+            {
+                "sender": "Network",
+                "message": "We are aware of the issue and are working on resolving it. We will keep you updated on the progress."
+            }
+        ],
+        "solved": false
+    },
+    {
+        "id": 4,
+        "subject": "Software update request",
+        "status": "Closed",
+        "lastChange": "05.03.2024. 10:20",
+        "department": "Development",
+        "importance": "Low",
+        "messages": [
+            {
+                "sender": "User",
+                "message": "Can we get the latest software update installed on our systems?"
+            },
+            {
+                "sender": "IT",
+                "message": "The latest software update has been installed successfully. Please let us know if you encounter any issues."
+            }
+        ],
+        "solved": true
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "subtitle": "Local infrastructure interruption",
+        "title": "London Office to lose internet on Nov 5th!",
+        "date": "Nov 1 2024",
+        "content": "There is a planned internet service interruption slated for Nov 5th. Only the London Office will be affected. For more info contact the relevant department."
+    },
+    {
+        "subtitle": "Global service interruption",
+        "title": "New Support site upgrade",
+        "date": "Nov 11 2024",
+        "content": "During the week we will be upgrading the support site. Site availability may me limited. We ask you for patience. For more info contact the relevant department."
+    },
+    {
+        "subtitle": "Network maintenance!!!!!!",
+        "title": "Scheduled maintenance for Paris Office",
+        "date": "Nov 8 2024",
+        "content": "Please be informed that there will be scheduled network maintenance for the Paris Office on Nov 8th. This may result in temporary disruptions. For more details, reach out to the IT department."
+    },
+    {
+        "subtitle": "Software update",
+        "title": "CRM system update on Nov 10th",
+        "date": "Nov 4 2024",
+        "content": "Our Customer Relationship Management (CRM) system will undergo a scheduled update on Nov 10th. During this time, access to certain features may be restricted. For further information, contact the support team."
+    }
+]

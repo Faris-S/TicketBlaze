@@ -8,3 +8,13 @@ body{
 .main{
     flex: 1;
 }
+
+table tr:not(.table-secondary):hover {
+    cursor: pointer;
+}
+
+.btn-svg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

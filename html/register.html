@@ -3,7 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TicketBlaze - Sign Up</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
 </head>
 
 <body>
@@ -28,7 +28,7 @@
                                 <label class="mb-2" for="password">Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Enter your password">
                             </div>
-                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                            <button type="button" class="btn btn-primary" id="signUpButton">Sign Up</button>
                         </form>
                     </div>
                 </div>
@@ -37,7 +37,12 @@
     </div>
 
     <!-- Bootstrap JS -->
-        <script src="js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.getElementById('signUpButton').addEventListener('click', function() {
+                window.location.href = '../html/login.html';
+            });
+        </script>
 </body>
 
 </html>

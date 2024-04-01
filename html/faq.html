@@ -1,0 +1,42 @@
+<br>
+<div class="container my-2 main">
+  <h1 class="mb-4">Frequently asked questions: </h1>
+  <div class="accordion" id="faqAccordion">
+    <!-- FAQ items will be inserted here -->
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+      <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+        class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+        <path
+          d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+      </svg>
+      <div>
+        The content could not be loaded. Please try again later.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  fetch('./json/faq.json')
+    .then(response => response.json())
+    .then(data => {
+      let output = '';
+      data.forEach((faq, index) => {
+        output += `
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading${index}">
+                    <button class="accordion-button ${index !== 0 ? 'collapsed' : ''}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="${index === 0 ? 'true' : 'false'}" aria-controls="collapse${index}">
+                        ${faq.title}
+                    </button>
+                </h2>
+                <div id="collapse${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" aria-labelledby="heading${index}" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        ${faq.content}
+                    </div>
+                </div>
+            </div>`;
+      });
+      document.querySelector('#faqAccordion').innerHTML = output;
+    })
+    .catch(error => console.error(error));
+</script>
