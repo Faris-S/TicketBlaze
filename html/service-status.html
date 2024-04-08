@@ -1,0 +1,177 @@
+<br>
+<div class="container my-2 main">
+
+    <h2>Company Service Status page</h2>
+    <p>See availability of all our critical services. A busy or inactive service could impact your ability to get
+        your work done. If that is the case, please remain patient as we are working on a fix. If you have problems,
+        but there are no service interruptions, please submit a ticket.</p>
+    <br>
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div id="status-summary" class="card">
+                <div class="card-header">
+                    Server Status
+                </div>
+                <div class="card-body">
+                    <p id="web_servers" class="card-text">Web Servers : <strong>Active</strong> <img
+                            src="https://toppng.com/uploads/preview/free-icons-png-green-button-icon-11562980484agrqdnwooe.png"
+                            height="20px" style="border-radius:50%;" title="Active"></p>
+
+                    <p id="mail_servers" class="card-text">Mail Servers : <strong>Inactive</strong> <img
+                            src="https://img.favpng.com/25/18/19/red-circle-button-png-favpng-jHcWHy40hi7EfTVtFQegdS1i6.jpg"
+                            height="20px" style="border-radius:50%;" title="Inactive"></p>
+
+                    <p id="ftp_servers" class="card-text">FTP Servers : <strong>Busy</strong> <img
+                            src="https://www.pngkit.com/png/full/139-1398183_a-shiny-light-orange-button-orange-light-icon.png"
+                            height="20px" style="border-radius:50%;" title="Busy"></p>
+
+                    <p id="client_servers" class="card-text">Client Servers : <strong>Active</strong> <img
+                            src="https://toppng.com/uploads/preview/free-icons-png-green-button-icon-11562980484agrqdnwooe.png"
+                            height="20px" style="border-radius:50%;" title="Busy"></p>
+                </div>
+                <div class="card-footer text-muted">
+                    Last updated: <span id="last_updated"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br> <br>
+
+    <div id="status-details" class="row">
+
+        <div class="col-md-3 d-flex align-items-stretch justify-content-center align-items-stretch">
+
+            <div class="card text-white bg-success mb-3" style="max-width: 18rem;" id="web_servers-details">
+                <div class="card-header">Web Servers</div>
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex align-items-stretch justify-content-center align-items-stretch">
+
+            <div class="card text-white bg-danger mb-3" style="max-width: 18rem;" id="mail_servers-details">
+                <div class="card-header">Mail Servers</div>
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex align-items-stretch justify-content-center align-items-stretch">
+
+            <div class="card text-white bg-warning mb-3" style="max-width: 18rem;" id="ftp_servers-details">
+                <div class="card-header">FTP Servers</div>
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-stretch justify-content-center align-items-stretch">
+
+            <div class="card text-white bg-success mb-3" style="max-width: 18rem;" id="client_servers-details">
+                <div class="card-header">Client Servers</div>
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    fetch('./json/service-status.json')
+        .then(response => response.json())
+        .then(data => {
+            for (let server in data) {
+                if (server !== 'last_updated') {
+                    // Find the corresponding server status element in the DOM
+                    let serverStatusElement = document.querySelector(`#${server}`);
+                    let serverStatusCard = document.querySelector(`#${server}-details`);
+                    console.log(serverStatusCard);
+
+                    // Update the server status
+                    let status = data[server].status;
+                    status = status.charAt(0).toUpperCase() + status.slice(1);
+                    serverStatusElement.innerHTML = `${getTitle(server)} : <strong>${status}</strong> <img src="${getStatusImage(status)}" height="20px" style="border-radius:50%;" title="${status}">`;
+
+                    // Update the server status message
+                    let cardTextElement = serverStatusCard.querySelector('.card-title');
+                    cardTextElement.textContent = `${status}`;
+
+                    // Update the server status color
+                    serverStatusCard.className = `card text-white ${getStatusColor(status)} mb-3`;
+
+                    // Update the server status title
+                    let cardTitleElement = serverStatusCard.querySelector('.card-text');
+                    cardTitleElement.textContent = getStatusMessage(status);
+                }
+            }
+
+            // Update the last updated time
+            let lastUpdatedElement = document.querySelector('#last_updated');
+            lastUpdatedElement.textContent = data.last_updated;
+        })
+        .catch(error => console.error(error));
+
+    function getStatusImage(status) {
+        switch (status.toLowerCase()) {
+            case 'active':
+                return 'https://toppng.com/uploads/preview/free-icons-png-green-button-icon-11562980484agrqdnwooe.png';
+            case 'inactive':
+                return 'https://img.favpng.com/25/18/19/red-circle-button-png-favpng-jHcWHy40hi7EfTVtFQegdS1i6.jpg';
+            case 'busy':
+                return 'https://www.pngkit.com/png/full/139-1398183_a-shiny-light-orange-button-orange-light-icon.png';
+            default:
+                return '';
+        }
+    }
+
+    function getStatusColor(status) {
+        switch (status.toLowerCase()) {
+            case 'active':
+                return 'bg-success';
+            case 'inactive':
+                return 'bg-danger';
+            case 'busy':
+                return 'bg-warning';
+            default:
+                return '';
+        }
+    }
+
+    function getStatusMessage(status) {
+        switch (status.toLowerCase()) {
+            case 'active':
+                return 'Servers are active and usable. No issues have been reported.';
+            case 'inactive':
+                return 'The servers are inactive. Please be patient as we are working on a fix.';
+            case 'busy':
+                return 'Servers are busy. Limited functionality may be available, but it may be delayed.';
+            default:
+                return '';
+        }
+    }
+
+    function getTitle(server) {
+        switch (server) {
+            case 'web_servers':
+                return 'Web Servers';
+            case 'mail_servers':
+                return 'Mail Servers';
+            case 'ftp_servers':
+                return 'FTP Servers';
+            case 'client_servers':
+                return 'Client Servers';
+            default:
+                return '';
+        }
+    }
+</script>
