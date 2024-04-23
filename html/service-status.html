@@ -87,37 +87,38 @@
 </div>
 
 <script>
-    fetch('./json/service-status.json')
+    fetch('./backend/get_servicestatus.php')
         .then(response => response.json())
         .then(data => {
-            for (let server in data) {
-                if (server !== 'last_updated') {
+            let statusData = data[0]; // Assuming the first object in the array is the latest status
+            console.log(statusData);
+            for (let server in statusData) {
+                if (server !== 'id' && server !== 'timestamp') {
                     // Find the corresponding server status element in the DOM
                     let serverStatusElement = document.querySelector(`#${server}`);
                     let serverStatusCard = document.querySelector(`#${server}-details`);
-                    console.log(serverStatusCard);
-
+    
                     // Update the server status
-                    let status = data[server].status;
+                    let status = statusData[server];
                     status = status.charAt(0).toUpperCase() + status.slice(1);
                     serverStatusElement.innerHTML = `${getTitle(server)} : <strong>${status}</strong> <img src="${getStatusImage(status)}" height="20px" style="border-radius:50%;" title="${status}">`;
-
+    
                     // Update the server status message
                     let cardTextElement = serverStatusCard.querySelector('.card-title');
                     cardTextElement.textContent = `${status}`;
-
+    
                     // Update the server status color
                     serverStatusCard.className = `card text-white ${getStatusColor(status)} mb-3`;
-
+    
                     // Update the server status title
                     let cardTitleElement = serverStatusCard.querySelector('.card-text');
                     cardTitleElement.textContent = getStatusMessage(status);
                 }
             }
-
+    
             // Update the last updated time
             let lastUpdatedElement = document.querySelector('#last_updated');
-            lastUpdatedElement.textContent = data.last_updated;
+            lastUpdatedElement.textContent = statusData.timestamp;
         })
         .catch(error => console.error(error));
 
