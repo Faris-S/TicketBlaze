@@ -66,19 +66,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="chat-message">
+                    <div class="chat-message" id="chat-messages">
                         <p><strong>You:</strong> Hello, I need help with my account.</p>
                         <p><strong>Support:</strong> Sure, I'd be happy to help. What seems to be the problem?</p>
                         <!-- Add more messages as needed -->
                     </div>
                     <div class="reply">
-                        <label for="replyMessage"><strong>Your Reply:</strong></label>
-                        <textarea class="form-control" id="replyMessage" rows="3"></textarea>
+                        <form id="newMessage" action="">
+                            <label class="my-2" for="replyMessage"><strong>Your Reply:</strong></label>
+                            <textarea class="form-control" id="replyMessage" rows="3"></textarea>
+                            <input class="my-2" type="hidden" name="ticketId" id="hiddenTicketId">
+                    <button type="submit" class="btn btn-primary my-2" data-bs-dismiss="modal">Send Reply</button>
+                    </form>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Send Reply</button>
                 </div>
             </div>
         </div>
@@ -86,105 +86,143 @@
 </div>
 
 <script>
-    fetch('./json/tickets.json')
+    $(document).ready(function () {
+    $("#newMessage").on("submit", function (event) {
+        console.log("Form submission prevented");
+        event.preventDefault();
+
+        var formData = {
+            ticketId: $("#hiddenTicketId").val(),
+            message: $("#replyMessage").val(),
+            sent_by: 5,
+        };
+
+        $.post(
+            "./backend/add_message.php",
+            formData,
+            function (response) {
+                // This is the success callback. You can use the 'response' variable to access the response from your server.
+                console.log(response);
+                $('#replyMessage').val('');
+            }
+        ).fail(function () {
+            // This is the failure callback. It's called if the request fails, for example, if the URL is wrong or the server doesn't respond.
+            console.log("Error occurred");
+        });
+    });
+});
+
+resetTickets();
+
+function resetTickets(){
+    fetch('./backend/get_tickets.php')
         .then(response => response.json())
         .then(data => {
             let output = `
             <thead>
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Department</th>
                     <th scope="col">Subject</th>
                     <th scope="col">Status</th>
                     <th scope="col">Last Change</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Priority</th>
+                    <th scope="col">Chat</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
         `;
+            let currentTicketId = null;
             if (data.length > 0) {
-                data.forEach(ticket => {
-                    output += `
-                <tr>
-                    <th scope="row">${ticket.id}</th>
-                    <td>${ticket.department}</td>
-                    <td>${ticket.subject}</td>
-                    <td>${ticket.status}${ticket.status === 'Awaiting response' ? '<span class="badge rounded-pill text-bg-danger ms-2">New</span>' : ''}</td>
-                    <td>${ticket.lastChange}</td>
-                    <td>
-                        <!-- BEGIN: Check if status is open -->
-                        ${ticket.status !== 'Open' ? '<button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chatModal">Open</button>' : ''}
-                        <!-- END: Check if status is open -->
-                    </td>
-                </tr>`;
-                });
                 document.querySelector('#jumbotron').style.display = 'none'; // Hide the jumbotron
             } else {
                 document.querySelector('#tickets-section').style.display = 'none'; // Hide the tickets section
                 document.querySelector('#jumbotron').style.display = 'block'; // Show the jumbotron
             }
+
+            data.forEach(ticket => {
+                // Check if this is a new ticket
+                currentTicketId = ticket.ticket_id;
+                // Add a new row for the ticket
+                output += `
+                
+                <tr>
+                    <td>${ticket.id}</td>
+                    <td>${ticket.subject}</td>
+                    <td>${ticket.status}</td>
+                    <td>${ticket.last_change}</td>
+                    <td>${ticket.department}</td>
+                    <td>${ticket.importance}</td>
+                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="openChatModal(${ticket.id})">Open</button></td>
+                </tr>`;
+            }
+            );
             output += `
-            </tbody>
-        `;
+            </tbody>`;
             document.querySelector('#tickets-table').innerHTML = output;
         })
         .catch(error => console.error(error));
-
-    fetch('./json/news.json')
+}
+    fetch('./backend/get_news.php')
         .then(response => response.json())
         .then(data => {
             let output = '';
             data.forEach(news => {
-                output += `
-            <div class="col-md-6">
-                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <strong class="d-inline-block mb-2 text-primary-emphasis">${news.title}</strong>
-                        <h3 class="mb-0">${news.subtitle}</h3>
-                        <div class="my-2 text-body-secondary">${news.date}</div>
-                        <p class="card-text mb-auto">${news.content}</p>
+                if (news.active === 1) {
+                    output += `
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <strong class="d-inline-block mb-2 text-primary-emphasis">${news.title}</strong>
+                            <h3 class="mb-0">${news.subtitle}</h3>
+                            <div class="my-2 text-body-secondary">${news.date}</div>
+                            <p class="card-text mb-auto">${news.content}</p>
+                        </div>
                     </div>
-                </div>
-            </div>`;
+                </div>`;
+                }
             });
             document.querySelector('#news').innerHTML = output;
         })
         .catch(error => console.error(error));
 
-    // Add a click event listener to the tickets table
-    document.querySelector('#tickets-table').addEventListener('click', function (event) {
-        // Check if the clicked element is a button
-        if (event.target.tagName === 'BUTTON') {
-            // Get the parent row of the clicked button
-            const row = event.target.parentElement.parentElement;
-            // Get the first cell of the row, which contains the ticket ID
-            const ticketId = row.cells[0].textContent;
-            // Open the chat modal for the ticket
-            openChatModal(ticketId);
-        }
-    });
 
-    // Get the ticket ID from the clicked button
     const openChatModal = (ticketId) => {
-        // Fetch the ticket data from the JSON file
-        fetch('./json/tickets.json')
+        fetch(`./backend/get_messages.php?ticketId=${ticketId}`)
             .then(response => response.json())
             .then(data => {
-                // Find the ticket with the matching ID
-                const ticket = data.find(ticket => ticket.id == ticketId);
-                if (ticket) {
-                    // Update the modal title with the ticket subject
-                    document.querySelector('#staticBackdropLabel').textContent = ticket.subject;
-                    // Clear the existing chat messages
-                    document.querySelector('.chat-message').innerHTML = '';
-                    // Add the ticket messages to the chat
-                    ticket.messages.forEach(message => {
-                        const chatMessage = `
-                        <p><strong>${message.sender}:</strong> ${message.message}</p>
-                    `;
-                        document.querySelector('.chat-message').insertAdjacentHTML('beforeend', chatMessage);
-                    });
+                fetch(`./backend/get_ticket.php?ticketId=${ticketId}`).then(response => response.json()).then(ticketData => {
+                    if (data.length > 0) {
+                        document.querySelector('#staticBackdropLabel').textContent = ticketData.subject;
+                        document.querySelector('#chat-messages').innerHTML = '';
+                        data.forEach(ticket => {
+                            let messageElement = document.createElement('p');
+                            switch (ticket.sent_by) {
+                                case 1:
+                                    var by = 'HR';
+                                    break;
+                                case 2:
+                                    var by = 'Hardware Support';
+                                    break;
+                                case 3:
+                                    var by = 'Software Support';
+                                    break;
+                                case 4:
+                                    var by = 'Accounting';
+                                    break;
+                                default:
+                                    var by = 'You';
+                                    break;
+                            }
+                            messageElement.innerHTML = `<strong>${by}</strong>: ${ticket.message}`;
+                            document.querySelector('#chat-messages').appendChild(messageElement);
+                            document.querySelector('#hiddenTicketId').value = ticketId;
+                        });
+                        new bootstrap.Modal(document.querySelector('#chatModal')).show();
+                    }
                 }
+                )
+
             })
             .catch(error => console.error(error));
     };
