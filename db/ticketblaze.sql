@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2024 at 04:47 AM
+-- Generation Time: May 14, 2024 at 02:21 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -121,7 +121,7 @@ CREATE TABLE `service_status` (
 INSERT INTO `service_status` (`id`, `web_servers`, `mail_servers`, `ftp_servers`, `client_servers`, `timestamp`) VALUES
 (1, 'busy', 'active', 'inactive', 'busy', '2024-04-20 20:50:52'),
 (2, 'busy', 'busy', 'busy', 'busy', '2024-04-21 21:16:00'),
-(4, 'active', 'inactive', 'inactive', 'busy', '2024-04-22 21:16:16');
+(4, 'active', 'inactive', 'busy', 'busy', '2024-04-22 21:16:16');
 
 -- --------------------------------------------------------
 
@@ -204,7 +204,8 @@ INSERT INTO `users` (`id`, `email`, `password`, `name`, `surname`, `created_at`,
 (2, 'hwsupport@example.com', 'hwsupport', 'Hardware', 'Support', '2024-04-20 20:09:16', '2024-04-20 20:09:16'),
 (3, 'swsupport@example.com', 'swsupport', 'Software', 'Support', '2024-04-20 20:09:16', '2024-04-20 20:09:16'),
 (4, 'accounting@example.com', 'accounting', 'Accounting', 'Department', '2024-04-20 20:09:16', '2024-04-20 20:09:16'),
-(5, 'faris.selimovich@gmail.com', 'faris.selimovich', 'Faris', 'Selimovic', '2024-04-20 20:09:16', '2024-04-20 20:09:16');
+(5, 'faris.selimovich@gmail.com', 'faris.selimovich', 'Faris', 'Selimovic', '2024-04-20 20:09:16', '2024-04-20 20:09:16'),
+(11, 'email@email.com', '$2y$10$Lx19iefcZi.IMl53AZgLh.fyfYT9DSGHBaxP5tHLwFdU1Htkwl9be', 'John', 'Doe', '2024-05-13 22:02:18', '2024-05-13 22:02:18');
 
 --
 -- Indexes for dumped tables
@@ -265,7 +266,7 @@ ALTER TABLE `faq`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `news`
@@ -283,13 +284,13 @@ ALTER TABLE `service_status`
 -- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- Constraints for dumped tables

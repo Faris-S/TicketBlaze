@@ -28,8 +28,8 @@
                                 <input type="password" class="form-control" id="password" placeholder="Enter password">
                             </div>
                             <button type="button" class="btn btn-primary" id="loginButton">Login</button>
-                            <a href="../html/password-reset.html" class="btn btn-link">Forgot Password?</a>
-                            <a href="../html/register.html" class="btn btn-link">Register</a>
+                            <!-- <a href="../html/password-reset.html" class="btn btn-link">Forgot Password?</a> -->
+                            <a href="../register/index.html" class="btn btn-link">Register</a>
                         </form>
                     </div>
                 </div>
@@ -40,8 +40,40 @@
     <!-- Bootstrap JS -->
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('loginButton').addEventListener('click', function () {
+        if (window.localStorage.getItem('user')) {
             window.location.href = '../index.html';
+        }
+            document.getElementById('loginButton').addEventListener('click', function (event) {
+            event.preventDefault();
+            
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            fetch('./../backend/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+            }).then(function (response) {
+            console.log(response);
+            if (response.ok) {
+                response.json()
+                .then(function (response){
+                    console.log(response);
+                window.localStorage.setItem('user', JSON.stringify(response));
+                window.location.href = '../index.html';
+                });
+            } else {
+                alert(response.status + ' - ' + response.statusText + '\n' + "Invalid email or password");
+            }
+            }).catch(function (error) {
+                console.log(error);
+                alert(error.message);
+            });
         });
     </script>
 </body>

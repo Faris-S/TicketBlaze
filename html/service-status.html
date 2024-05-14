@@ -87,7 +87,7 @@
 </div>
 
 <script>
-    fetch('./backend/get_servicestatus.php')
+    fetch('./backend/service-status')
         .then(response => response.json())
         .then(data => {
             let statusData = data[0]; // Assuming the first object in the array is the latest status

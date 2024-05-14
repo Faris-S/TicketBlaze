@@ -98,7 +98,7 @@
         };
 
         $.post(
-            "./backend/add_message.php",
+            "./backend/tickets/add-message",
             formData,
             function (response) {
                 // This is the success callback. You can use the 'response' variable to access the response from your server.
@@ -115,7 +115,7 @@
 resetTickets();
 
 function resetTickets(){
-    fetch('./backend/get_tickets.php')
+    fetch('./backend/tickets/all')
         .then(response => response.json())
         .then(data => {
             let output = `
@@ -163,7 +163,7 @@ function resetTickets(){
         })
         .catch(error => console.error(error));
 }
-    fetch('./backend/get_news.php')
+    fetch('./backend/news')
         .then(response => response.json())
         .then(data => {
             let output = '';
@@ -188,10 +188,10 @@ function resetTickets(){
 
 
     const openChatModal = (ticketId) => {
-        fetch(`./backend/get_messages.php?ticketId=${ticketId}`)
+        fetch(`./backend/tickets/${ticketId}/messages`)
             .then(response => response.json())
             .then(data => {
-                fetch(`./backend/get_ticket.php?ticketId=${ticketId}`).then(response => response.json()).then(ticketData => {
+                fetch(`./backend/tickets/${ticketId}`).then(response => response.json()).then(ticketData => {
                     if (data.length > 0) {
                         document.querySelector('#staticBackdropLabel').textContent = ticketData.subject;
                         document.querySelector('#chat-messages').innerHTML = '';

@@ -10,3 +10,5 @@ define('DB_PORT', '3306');
 define('DB_USER', 'user');
 define('DB_PASSWORD', 'user123');
 define('DB_HOST', '127.0.0.1');
+
+define('JWT_SECRET', 'T1ck3tBl4z3');
