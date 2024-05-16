@@ -156,10 +156,14 @@
       pageNotFound: "error_404"
     });
 
-    app.run();
+    if (window.localStorage.getItem('user')) {
+      app.run();
+    } else {
+      window.location.href = 'login/index.html';
+    }
 
     document.querySelector('#logOutButton').addEventListener('click', function () {
-      window.location.href = 'html/login.html';
+      window.location.href = 'login/index.html';
     });
 
     $(document).ready(function () {
@@ -176,7 +180,7 @@
         console.log(formData);
 
         $.post(
-          "./backend/add_ticket.php",
+          "./backend/tickets/add",
           formData,
           function (response) {
             // This is the success callback. You can use the 'response' variable to access the response from your server.
@@ -190,7 +194,7 @@
             console.log(formData);
             
             $.post(
-              "./backend/add_message.php",
+              "./backend/tickets/add-message",
               formData,
               function (response) {
                 // This is the success callback. You can use the 'response' variable to access the response from your server.
