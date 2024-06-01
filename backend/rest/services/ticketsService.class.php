@@ -8,8 +8,8 @@ class ticketsService {
         $this->ticketsDao = new ticketsDao();
     }
 
-    public function get_tickets() {
-        $rows = $this->ticketsDao->get_tickets();
+    public function get_tickets($userId) {
+        $rows = $this->ticketsDao->get_tickets($userId);
         return $rows;
     }
 

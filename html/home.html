@@ -76,8 +76,9 @@
                             <label class="my-2" for="replyMessage"><strong>Your Reply:</strong></label>
                             <textarea class="form-control" id="replyMessage" rows="3"></textarea>
                             <input class="my-2" type="hidden" name="ticketId" id="hiddenTicketId">
-                    <button type="submit" class="btn btn-primary my-2" data-bs-dismiss="modal">Send Reply</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary my-2" data-bs-dismiss="modal">Send
+                                Reply</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -87,38 +88,48 @@
 
 <script>
     $(document).ready(function () {
-    $("#newMessage").on("submit", function (event) {
-        console.log("Form submission prevented");
-        event.preventDefault();
+        $("#newMessage").on("submit", function (event) {
+            console.log("Form submission prevented");
+            event.preventDefault();
 
-        var formData = {
-            ticketId: $("#hiddenTicketId").val(),
-            message: $("#replyMessage").val(),
-            sent_by: 5,
-        };
+            var formData = {
+                ticketId: $("#hiddenTicketId").val(),
+                message: $("#replyMessage").val(),
+            };
 
-        $.post(
-            "./backend/tickets/add-message",
-            formData,
-            function (response) {
-                // This is the success callback. You can use the 'response' variable to access the response from your server.
-                console.log(response);
-                $('#replyMessage').val('');
-            }
-        ).fail(function () {
-            // This is the failure callback. It's called if the request fails, for example, if the URL is wrong or the server doesn't respond.
-            console.log("Error occurred");
+            $.ajax({
+                url: "./backend/tickets/add-message",
+                type: "POST",
+                headers: {
+                    'Authentication': JSON.parse(localStorage.getItem('user')).token,
+                },
+                data: formData,
+                success: function (response) {
+                    console.log(response);
+                    $('#replyMessage').val('');
+                },
+                error: function () {
+                    console.log("Error occurred");
+                }
+            });
         });
     });
-});
 
-resetTickets();
+    resetTickets();
 
-function resetTickets(){
-    fetch('./backend/tickets/all')
-        .then(response => response.json())
-        .then(data => {
-            let output = `
+    function resetTickets() {
+        fetch('./backend/tickets/all',
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authentication': JSON.parse(localStorage.getItem('user')).token
+                }
+            }
+        )
+            .then(response => response.json())
+            .then(data => {
+                let output = `
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -132,19 +143,19 @@ function resetTickets(){
             </thead>
             <tbody class="table-group-divider">
         `;
-            let currentTicketId = null;
-            if (data.length > 0) {
-                document.querySelector('#jumbotron').style.display = 'none'; // Hide the jumbotron
-            } else {
-                document.querySelector('#tickets-section').style.display = 'none'; // Hide the tickets section
-                document.querySelector('#jumbotron').style.display = 'block'; // Show the jumbotron
-            }
+                let currentTicketId = null;
+                if (data.length > 0) {
+                    document.querySelector('#jumbotron').style.display = 'none'; // Hide the jumbotron
+                } else {
+                    document.querySelector('#tickets-section').style.display = 'none'; // Hide the tickets section
+                    document.querySelector('#jumbotron').style.display = 'block'; // Show the jumbotron
+                }
 
-            data.forEach(ticket => {
-                // Check if this is a new ticket
-                currentTicketId = ticket.ticket_id;
-                // Add a new row for the ticket
-                output += `
+                data.forEach(ticket => {
+                    // Check if this is a new ticket
+                    currentTicketId = ticket.ticket_id;
+                    // Add a new row for the ticket
+                    output += `
                 
                 <tr>
                     <td>${ticket.id}</td>
@@ -155,15 +166,23 @@ function resetTickets(){
                     <td>${ticket.importance}</td>
                     <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="openChatModal(${ticket.id})">Open</button></td>
                 </tr>`;
-            }
-            );
-            output += `
+                }
+                );
+                output += `
             </tbody>`;
-            document.querySelector('#tickets-table').innerHTML = output;
-        })
-        .catch(error => console.error(error));
-}
-    fetch('./backend/news')
+                document.querySelector('#tickets-table').innerHTML = output;
+            })
+            .catch(error => console.error(error));
+    }
+    fetch('./backend/news',
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': JSON.parse(localStorage.getItem('user')).token
+            }
+        }
+    )
         .then(response => response.json())
         .then(data => {
             let output = '';
@@ -188,10 +207,26 @@ function resetTickets(){
 
 
     const openChatModal = (ticketId) => {
-        fetch(`./backend/tickets/${ticketId}/messages`)
+        fetch(`./backend/tickets/${ticketId}/messages`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authentication': JSON.parse(localStorage.getItem('user')).token
+                }
+            }
+        )
             .then(response => response.json())
             .then(data => {
-                fetch(`./backend/tickets/${ticketId}`).then(response => response.json()).then(ticketData => {
+                fetch(`./backend/tickets/${ticketId}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authentication': JSON.parse(localStorage.getItem('user')).token
+                        }
+                    }
+                ).then(response => response.json()).then(ticketData => {
                     if (data.length > 0) {
                         document.querySelector('#staticBackdropLabel').textContent = ticketData.subject;
                         document.querySelector('#chat-messages').innerHTML = '';

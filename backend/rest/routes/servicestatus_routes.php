@@ -7,10 +7,15 @@ require_once __DIR__ . '/../services/servicestatusService.class.php';
  *      path="/service-status",
  *      tags={"service-status"},
  *      summary="Get the most recent service-status entries",
+ *      security={{"ApiKey": {}}},
  *      @OA\Response(
  *          response=200,
  *          description="Recent service-status entry data",
  *      ),
+ *     @OA\Response(
+ *        response=401,
+ *       description="Token not provided"
+ *  ),
  * )
  */
 

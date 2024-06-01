@@ -6,9 +6,9 @@ class TicketsDao extends BaseDao {
         parent::__construct("tickets");
     }
 
-    public function get_tickets() {
-        $query = "SELECT * FROM tickets";
-        return $this->query($query, []);
+    public function get_tickets($userId) {
+        $query = "SELECT * FROM tickets WHERE sender_id = :sender_id;";
+        return $this->query($query, [':sender_id' => $userId]);
     }
 
     public function get_messages($ticketId) {

@@ -40,7 +40,8 @@
         </ul>
         <button class="btn btn-primary btn-lg me-2" type="button" data-bs-toggle="modal"
           data-bs-target="#newTicketModal">Create a ticket</button>
-        <button class="btn btn-outline-primary btn-lg ms-2" type="button" id="logOutButton">
+        <button class="btn btn-outline-primary btn-lg ms-2" type="button" id="logOutButton"
+          onclick="window.localStorage.clear()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
             class="btn-svg bi bi-box-arrow-right" viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -179,38 +180,46 @@
         };
         console.log(formData);
 
-        $.post(
-          "./backend/tickets/add",
-          formData,
-          function (response) {
-            // This is the success callback. You can use the 'response' variable to access the response from your server.
+        $.ajax({
+          url: "./backend/tickets/add",
+          type: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication': JSON.parse(localStorage.getItem('user')).token
+          },
+          data: JSON.stringify(formData),
+          success: function (response) {
             response = response.slice(1, -1);
             console.log(response);
             var formData = {
               ticketId: Number(response),
               message: $("#inputMessage").val(),
-              sent_by: 5,
             };
             console.log(formData);
-            
-            $.post(
-              "./backend/tickets/add-message",
-              formData,
-              function (response) {
-                // This is the success callback. You can use the 'response' variable to access the response from your server.
+
+            $.ajax({
+              url: "./backend/tickets/add-message",
+              type: "POST",
+              headers: {
+                'Content-Type': 'application/json',
+                'Authentication': JSON.parse(localStorage.getItem('user')).token
+              },
+              data: JSON.stringify(formData),
+              success: function (response) {
                 console.log(response);
+              },
+              error: function () {
+                console.log("Error occurred");
               }
-            ).fail(function () {
-              // This is the failure callback. It's called if the request fails, for example, if the URL is wrong or the server doesn't respond.
-              console.log("Error occurred");
             });
+
             $('#inputSubject').val('');
             $('#inputMessage').val('');
             resetTickets();
+          },
+          error: function () {
+            console.log("Error occurred");
           }
-        ).fail(function () {
-          // This is the failure callback. It's called if the request fails, for example, if the URL is wrong or the server doesn't respond.
-          console.log("Error occurred");
         });
       });
     });

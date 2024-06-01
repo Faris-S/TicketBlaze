@@ -19,6 +19,10 @@
 <script>
   fetch('./backend/faq', {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authentication': JSON.parse(localStorage.getItem('user')).token
+      }
     })
     .then(response => response.json())
     .then(data => {
