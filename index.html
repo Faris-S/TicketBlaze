@@ -207,15 +207,16 @@
               data: JSON.stringify(formData),
               success: function (response) {
                 console.log(response);
+                $('#inputSubject').val('');
+                $('#inputMessage').val('');
+                resetTickets();
               },
               error: function () {
                 console.log("Error occurred");
               }
             });
 
-            $('#inputSubject').val('');
-            $('#inputMessage').val('');
-            resetTickets();
+
           },
           error: function () {
             console.log("Error occurred");

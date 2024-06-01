@@ -47,7 +47,7 @@ Flight::group('/auth', function(){
 
         ];
 
-        $token = JWT::encode($jwt_payload, JWT_SECRET, "HS256");
+        $token = JWT::encode($jwt_payload, Config::JWT_SECRET(), "HS256");
 
         Flight::json(
             array_merge($user, ['token' => $token])
@@ -125,7 +125,7 @@ Flight::group('/auth', function(){
             if (!$token){
                 Flight::halt(401, 'Token not provided');
             }
-            $decoded = JWT::decode($token, new Key(JWT_SECRET, "HS256"));
+            $decoded = JWT::decode($token, new Key(Config::JWT_SECRET(), "HS256"));
             Flight::json(["jwt_decoded" => $decoded, 'user' => $decoded->user]);
         } catch (Exception $e) {
             Flight::halt(401, $e->getMessage());
