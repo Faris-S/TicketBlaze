@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-define('BASE_URL', 'http://localhost/TicketBlaze/backend/');
+define('BASE_URL', 'https://walrus-app-y8w76.ondigitalocean.app/backend/');
 
 error_reporting(0);
 
