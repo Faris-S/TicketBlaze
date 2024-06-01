@@ -8,9 +8,4 @@ require 'rest/routes/news_routes.php';
 require 'rest/routes/servicestatus_routes.php';
 require 'rest/routes/auth_routes.php';
 
-Flight::route("/", function(){
-    echo "Hello World!";
-});
-
-
 Flight::start();
