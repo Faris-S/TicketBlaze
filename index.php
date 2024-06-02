@@ -1,4 +1,11 @@
 <?php
-    // This should be called info.php
-    phpinfo();
+       $env = getenv('DB_NAME');
+
+       if ($env != null) {
+           header("Location: /index.html");
+       } else {
+           header("Location: /TicketBlaze/index.html");
+       }
+
+       die();
 ?>
