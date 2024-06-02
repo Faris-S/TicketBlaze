@@ -10,7 +10,7 @@ Flight::group('/auth', function(){
 /**
  * @OA\Post(
  *      path="/auth/login",
- *      tags={"authentification"},
+ *      tags={"authentication"},
  *      summary="Log in",
  *      @OA\Response(
  *          response=200,
@@ -57,7 +57,7 @@ Flight::group('/auth', function(){
 /**
  * @OA\Post(
  *      path="/auth/register",
- *      tags={"authentification"},
+ *      tags={"authentication"},
  *      summary="Register a new user",
  *      @OA\Response(
  *          response=200,
@@ -101,7 +101,7 @@ Flight::group('/auth', function(){
             "password" => $password
         ];
 
-        $reponse = $authService->add_user($data);
+        $authService->add_user($data);
 
     });
 
@@ -109,7 +109,7 @@ Flight::group('/auth', function(){
 /**
  * @OA\Post(
  *      path="/auth/logout",
- *      tags={"authentification"},
+ *      tags={"authentication"},
  *      summary="Log out of the system",
  *      security={{"ApiKey": {}}},
  *      @OA\Response(
