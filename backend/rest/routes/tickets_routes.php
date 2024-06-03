@@ -10,16 +10,22 @@ Flight::group('/tickets', function(){
  *      path="/tickets/all",
  *      tags={"tickets"},
  *      summary="Get all tickets",
+ *      security={{"ApiKey": {}}},
  *      @OA\Response(
  *          response=200,
  *          description="Array of all tickets in the database",
  *      ),
+ *     @OA\Response(
+ *        response=401,
+ *       description="Unauthorized",
+ *   )
  * )
  */
 
     Flight::route('GET /all', function(){
         $ticketsService = new ticketsService();
-        $data = $ticketsService->get_tickets();
+        $userId = Flight::get('user')->id;
+        $data = $ticketsService->get_tickets($userId);
         echo json_encode($data);
     });
 
@@ -28,10 +34,15 @@ Flight::group('/tickets', function(){
  *      path="/tickets/{ticketId}",
  *      tags={"tickets"},
  *      summary="Get a specific ticket",
+ *      security={{"ApiKey": {}}},
  *      @OA\Response(
  *          response=200,
  *          description="Data of the ticket with the specified id in the database or false if the ticket does not exist",
  *      ),
+ *     @OA\Response(
+ *       response=401,
+ *      description="Unauthorized",
+ * ),
  *      @OA\Parameter(@OA\Schema(type="number"), in="path", name="ticketId", required=true, description="Ticket Id"),
  * )
  */
@@ -47,10 +58,15 @@ Flight::group('/tickets', function(){
  *      path="/tickets/add",
  *      tags={"tickets"},
  *      summary="Add a new ticket",
+ *      security={{"ApiKey": {}}},
  *      @OA\Response(
  *          response=200,
  *          description="Add the ticket to the database and return the data of the added ticket or false if the ticket could not be added",
  *      ),
+ *     @OA\Response(
+ *       response=401,
+ *       description="Unauthorized",
+ * ),
  *      @OA\RequestBody(
  *          description="Ticket object that needs to be added to the database",
  *          @OA\JsonContent(
@@ -68,7 +84,7 @@ Flight::group('/tickets', function(){
         $subject = Flight::request()->data->subject;
         $department = Flight::request()->data->department;
         $importance = Flight::request()->data->importance;
-        $sender_id = 5;
+        $sender_id = Flight::get('user')->id;
     
         $ticket = array(
             'subject' => $subject,
@@ -87,10 +103,15 @@ Flight::group('/tickets', function(){
  *      path="/tickets/{ticketId}/messages",
  *      tags={"tickets"},
  *      summary="Get messages of a specific ticket",
+ *     security={{"ApiKey": {}}},
  *      @OA\Response(
  *          response=200,
  *          description="Array of all messages of the ticket with the specified id in the database or false if the ticket does not exist",
  *      ),
+ *    @OA\Response(
+ *      response=401,
+ *    description="Unauthorized",
+ * ),
  *      @OA\Parameter(@OA\Schema(type="number"), in="path", name="ticketId", required=true, description="Ticket Id"),
  * )
  */
@@ -106,10 +127,15 @@ Flight::group('/tickets', function(){
  *      path="/tickets/add-message",
  *      tags={"tickets"},
  *      summary="Add a message to a ticket",
+ *     security={{"ApiKey": {}}},
  *      @OA\Response(
  *          response=200,
  *          description="Add the message to the database and return the data of the added message or false if the message could not be added",
  *      ),
+ *   @OA\Response(
+ *    response=401,
+ *  description="Unauthorized",
+ * ),
  *      @OA\RequestBody(
  *          description="Message object that needs to be added to the database",
  *          @OA\JsonContent(
@@ -127,7 +153,7 @@ Flight::group('/tickets', function(){
         $ticketId = Flight::request()->data->ticketId;
         $messageText = Flight::request()->data->message;
         $sent_at = date('Y-m-d H:i:s');
-        $sent_by = Flight::request()->data->sent_by;
+        $sent_by = Flight::get('user')->id;
     
         $message = array(
             'ticket_id' => $ticketId,

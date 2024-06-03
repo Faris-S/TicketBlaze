@@ -87,7 +87,15 @@
 </div>
 
 <script>
-    fetch('./backend/service-status')
+    fetch('./backend/service-status',
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': JSON.parse(localStorage.getItem('user')).token
+            }
+        }
+    )
         .then(response => response.json())
         .then(data => {
             let statusData = data[0]; // Assuming the first object in the array is the latest status

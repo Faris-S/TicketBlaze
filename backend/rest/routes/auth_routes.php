@@ -10,7 +10,7 @@ Flight::group('/auth', function(){
 /**
  * @OA\Post(
  *      path="/auth/login",
- *      tags={"authentification"},
+ *      tags={"authentication"},
  *      summary="Log in",
  *      @OA\Response(
  *          response=200,
@@ -47,7 +47,7 @@ Flight::group('/auth', function(){
 
         ];
 
-        $token = JWT::encode($jwt_payload, JWT_SECRET, "HS256");
+        $token = JWT::encode($jwt_payload, Config::JWT_SECRET(), "HS256");
 
         Flight::json(
             array_merge($user, ['token' => $token])
@@ -57,7 +57,7 @@ Flight::group('/auth', function(){
 /**
  * @OA\Post(
  *      path="/auth/register",
- *      tags={"authentification"},
+ *      tags={"authentication"},
  *      summary="Register a new user",
  *      @OA\Response(
  *          response=200,
@@ -101,7 +101,7 @@ Flight::group('/auth', function(){
             "password" => $password
         ];
 
-        $reponse = $authService->add_user($data);
+        $authService->add_user($data);
 
     });
 
@@ -109,7 +109,7 @@ Flight::group('/auth', function(){
 /**
  * @OA\Post(
  *      path="/auth/logout",
- *      tags={"authentification"},
+ *      tags={"authentication"},
  *      summary="Log out of the system",
  *      security={{"ApiKey": {}}},
  *      @OA\Response(
@@ -125,7 +125,7 @@ Flight::group('/auth', function(){
             if (!$token){
                 Flight::halt(401, 'Token not provided');
             }
-            $decoded = JWT::decode($token, new Key(JWT_SECRET, "HS256"));
+            $decoded = JWT::decode($token, new Key(Config::JWT_SECRET(), "HS256"));
             Flight::json(["jwt_decoded" => $decoded, 'user' => $decoded->user]);
         } catch (Exception $e) {
             Flight::halt(401, $e->getMessage());
